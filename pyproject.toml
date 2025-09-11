@@ -1,5 +1,5 @@
 [project]
-name = "arxiv-personal-feed"
+name = "personal-arxiv-feed"
 version = "0.1.0"
 description = "A personal Arxiv feed server."
 authors = [{ name = "opencode" }, { name = "Maarten Grachten" }]
@@ -17,7 +17,7 @@ dependencies = [
 ]
 
 [project.scripts]
-arxiv-personal-feed = "arxiv_personal_feed.main:run"
+personal-arxiv-feed = "personal_arxiv_feed.main:run"
 
 [build-system]
 requires = ["hatchling"]

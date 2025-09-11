@@ -22,7 +22,7 @@ This project is a FastAPI application that provides a personalized feed of Arxiv
 
 ## Configuration
 
-All configuration is done in the `src/arxiv_personal_feed/config.py` file. You can modify the following settings:
+All configuration is done in the `src/personal_arxiv_feed/config.py` file. You can modify the following settings:
 
 -   **LLM Settings**:
     -   `llm_model`: The model to use for classification (e.g., `"google-gla:gemini-2.5-flash-lite"`, or `"openai:gpt-4.1-nano"`).
@@ -49,8 +49,8 @@ All configuration is done in the `src/arxiv_personal_feed/config.py` file. You c
 1.  **Clone the repository:**
 
     ```bash
-    git clone https://github.com/your-username/arxiv-personal-feed.git
-    cd arxiv-personal-feed
+    git clone https://github.com/mgrachten/personal-arxiv-feed.git
+    cd personal-arxiv-feed
     ```
 
 2.  **Install dependencies:**
@@ -83,13 +83,13 @@ All configuration is done in the `src/arxiv_personal_feed/config.py` file. You c
 To start the server, run the following command:
 
 ```bash
-arxiv-personal-feed
+personal-arxiv-feed
 ```
 
 Alternatively, when using `uv`:
 
 ```bash
-uv run arxiv-personal-feed
+uv run personal-arxiv-feed
 ```
 
 The application will be available at `http://localhost:8000`.
