@@ -11,10 +11,6 @@ class Settings(BaseSettings):
         env_file = ".env"
 
 
-class LLMSettings(BaseSettings):
-    batch_size: int = 10
-    fields_to_include: List[str] = ["title"]
-
 
 
 class Interest(SQLModel, table=True):

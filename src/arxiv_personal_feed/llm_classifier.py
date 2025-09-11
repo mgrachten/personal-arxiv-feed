@@ -1,15 +1,13 @@
 from pydantic import BaseModel, Field
 import pydantic_ai
-from .models import Article, Interest, LLMSettings
+from .models import Article, Interest
+from .config import settings
 from sqlmodel import Session
 from .database import engine
 import logging
 from typing import List
 
 logger = logging.getLogger(__name__)
-llm_settings = LLMSettings()
-# don't touch this:
-MODEL = "google-gla:gemini-2.5-flash-lite"
 
 
 class RelevanceDecision(BaseModel):
@@ -33,7 +31,7 @@ def classify_article_batch(
     papers_str = ""
     for i, article in enumerate(articles):
         papers_str += f"\n--- Paper {i + 1} ---\n"
-        for field in llm_settings.fields_to_include:
+        for field in settings.llm_fields_to_include:
             papers_str += f"{field.capitalize()}: {getattr(article, field)}\n"
 
     user_prompt = f"""
@@ -49,7 +47,7 @@ def classify_article_batch(
         output_type=BatchRelevanceDecision,
     )
 
-    result = agent.run_sync(user_prompt=user_prompt, model=MODEL)
+    result = agent.run_sync(user_prompt=user_prompt, model=settings.llm_model)
     return result.output.decisions
 
 
@@ -69,10 +67,10 @@ def classify_and_update_articles(articles: List[Article], interests: List[Intere
     all_decisions = []
     try:
         logger.info(
-            f"Classifying {len(articles)} articles in batches of {llm_settings.batch_size}..."
+            f"Classifying {len(articles)} articles in batches of {settings.llm_batch_size}..."
         )
-        for i in range(0, len(articles), llm_settings.batch_size):
-            batch = articles[i : i + llm_settings.batch_size]
+        for i in range(0, len(articles), settings.llm_batch_size):
+            batch = articles[i : i + settings.llm_batch_size]
             logger.info(f"Classifying batch {i // llm_settings.batch_size + 1}...")
             decisions = classify_article_batch(batch, interests)
             all_decisions.extend(decisions)

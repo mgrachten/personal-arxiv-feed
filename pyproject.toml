@@ -2,7 +2,7 @@
 name = "arxiv-personal-feed"
 version = "0.1.0"
 description = "A personal Arxiv feed server."
-authors = [{ name = "opencode" }]
+authors = [{ name = "opencode" }, { name = "Maarten Grachten" }]
 requires-python = ">=3.10"
 dependencies = [
     "fastapi",
@@ -13,6 +13,7 @@ dependencies = [
     "sqlmodel",
     "apscheduler",
     "python-dotenv",
+    "pytz",
 ]
 
 [project.scripts]

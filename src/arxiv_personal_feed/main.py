@@ -6,7 +6,10 @@ from .database import engine, create_db_and_tables
 from .models import Article, Interest, Category
 from .arxiv_fetcher import fetch_new_articles
 from .llm_classifier import classify_and_update_articles
+from .config import settings
 from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.cron import CronTrigger
+import pytz
 import datetime
 import logging
 
@@ -26,8 +29,21 @@ def get_session():
 @app.on_event("startup")
 def startup_event():
     create_db_and_tables()
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(fetch_and_classify, "interval", days=1)
+    
+    # Run once on startup
+    fetch_and_classify()
+
+    scheduler = BackgroundScheduler(timezone=pytz.utc)
+    
+    et = pytz.timezone(settings.scheduler_timezone)
+    scheduler.add_job(
+        fetch_and_classify,
+        trigger=CronTrigger(
+            hour=settings.scheduler_hour,
+            minute=settings.scheduler_minute,
+            timezone=et
+        )
+    )
     scheduler.start()
 
 
@@ -35,7 +51,7 @@ def fetch_and_classify():
     logger.info("Starting background task: fetch_and_classify")
     with Session(engine) as session:
         categories = session.exec(select(Category)).all()
-        interests = session.exec(select(Interest)).all()
+        interests = list(session.exec(select(Interest)).all())
         
         if not categories:
             logger.info("No categories defined. Skipping fetch.")
@@ -93,8 +109,10 @@ def update_interests(
     session: Session = Depends(get_session),
 ):
     # Clear existing interests and categories
-    session.exec(delete(Interest))
-    session.exec(delete(Category))
+    for interest in session.exec(select(Interest)).all():
+        session.delete(interest)
+    for category in session.exec(select(Category)).all():
+        session.delete(category)
     session.commit()
 
     # Add new interests and categories from the form
