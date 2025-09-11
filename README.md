@@ -25,7 +25,7 @@ This project is a FastAPI application that provides a personalized feed of Arxiv
 All configuration is done in the `src/personal_arxiv_feed/config.py` file. You can modify the following settings:
 
 -   **LLM Settings**:
-    -   `llm_model`: The model to use for classification (e.g., `"google-gla:gemini-2.5-flash-lite"`, or `"openai:gpt-4.1-nano"`).
+    -   `llm_model`: The model to use for classification (e.g., `"google-gla:gemini-2.5-flash-lite"`).
     -   `llm_batch_size`: The number of articles to classify in a single batch.
     -   `llm_fields_to_include`: The fields of the article to use for classification (e.g., `["title", "abstract"]`).
 -   **Scheduler Settings**:
@@ -75,7 +75,7 @@ All configuration is done in the `src/personal_arxiv_feed/config.py` file. You c
     You will need to set your API key as an environment variable. For example:
 
     ```bash
-    export OPENAI_API_KEY="your-api-key"
+    export GEMINI_API_KEY="your-api-key"
     ```
 
 ### Running the Application
@@ -98,11 +98,11 @@ The application will be available at `http://localhost:8000`.
 
 1.  **Define your interests**:
     -   Navigate to `http://localhost:8000/interests`.
-    -   Add the Arxiv categories you are interested in (e.g., `cs.AI`, `cs.SD`).
     -   Add your specific interests, one per line (e.g., `Large Language Models`, `Reinforcement Learning`).
-    -   Click "Update".
+    -   Add the Arxiv categories you are interested in (e.g., `cs.AI`, `cs.SD`).
+    -   Click "Save Changes".
 
 2.  **View your feed**:
     -   Navigate to `http://localhost:8000`.
-    -   The feed will be populated with relevant papers. This may take a few minutes after you have updated your interests.
+    -   The feed will be populated with relevant papers. This may take a few minutes after you have updated your interests. The page will not refresh automatically.
     -   The feed will be automatically updated daily.
