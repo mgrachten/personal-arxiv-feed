@@ -71,7 +71,7 @@ def classify_and_update_articles(articles: List[Article], interests: List[Intere
         )
         for i in range(0, len(articles), settings.llm_batch_size):
             batch = articles[i : i + settings.llm_batch_size]
-            logger.info(f"Classifying batch {i // llm_settings.batch_size + 1}...")
+            logger.info(f"Classifying batch {i // settings.llm_batch_size + 1}...")
             decisions = classify_article_batch(batch, interests)
             all_decisions.extend(decisions)
         logger.info("Finished classifying all articles.")

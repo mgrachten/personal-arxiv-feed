@@ -10,6 +10,7 @@ from .llm_classifier import classify_and_update_articles
 from .config import settings
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
+from apscheduler.executors.pool import ThreadPoolExecutor
 import pytz
 import datetime
 import logging
@@ -32,10 +33,14 @@ def get_session():
 def startup_event():
     create_db_and_tables()
     
-    # Run once on startup
-    fetch_and_classify()
+    # Run once on startup in a separate thread
+    import threading
+    threading.Thread(target=fetch_and_classify).start()
 
-    scheduler = BackgroundScheduler(timezone=pytz.utc)
+    executors = {
+        'default': ThreadPoolExecutor(1)
+    }
+    scheduler = BackgroundScheduler(timezone=pytz.utc, executors=executors)
     
     et = pytz.timezone(settings.scheduler_timezone)
     scheduler.add_job(

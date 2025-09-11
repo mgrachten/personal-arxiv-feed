@@ -27,6 +27,8 @@ All configuration is done in the `src/arxiv_personal_feed/config.py` file. You c
     -   `scheduler_minute`: The minute of the hour to run the daily update (0-59).
 -   **Server Settings**:
     -   `server_port`: The port to run the server on (e.g., `8000`).
+-   **Arxiv Settings**:
+    -   `arxiv_max_results_per_category`: The maximum number of new articles to fetch from each Arxiv category during an update.
 
 ## Getting Started
 
