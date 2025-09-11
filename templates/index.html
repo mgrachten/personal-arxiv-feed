@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Arxiv Personal Feed</title>
+    <style>
+        body { font-family: sans-serif; }
+        .article { margin-bottom: 1em; padding: 1em; border: 1px solid #ccc; }
+        .article h2 { font-size: 1.2em; }
+        .article p { margin: 0.5em 0; }
+    </style>
+</head>
+<body>
+    <h1>Arxiv Personal Feed</h1>
+    <a href="/interests">Manage Interests</a>
+    <hr>
+    {% for date, articles in articles_by_date.items() %}
+        <h2>{{ date.strftime('%Y-%m-%d') }}</h2>
+        {% for article in articles %}
+            <div class="article">
+                <h2><a href="https://arxiv.org/abs/{{ article.entry_id.split('/')[-1] }}">{{ article.title }}</a></h2>
+                <p><strong>Published:</strong> {{ article.published.strftime('%Y-%m-%d') }}</p>
+                <p><strong>Abstract:</strong> {{ article.abstract }}</p>
+                <p><strong>Relevance:</strong> {{ article.relevance_reason }}</p>
+            </div>
+        {% endfor %}
+    {% endfor %}
+</body>
+</html>

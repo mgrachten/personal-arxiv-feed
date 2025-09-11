@@ -1,0 +1,23 @@
+[project]
+name = "arxiv-personal-feed"
+version = "0.1.0"
+description = "A personal Arxiv feed server."
+authors = [{ name = "opencode" }]
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "jinja2",
+    "arxiv",
+    "pydantic-ai",
+    "sqlmodel",
+    "apscheduler",
+    "python-dotenv",
+]
+
+[project.scripts]
+arxiv-personal-feed = "arxiv_personal_feed.main:run"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

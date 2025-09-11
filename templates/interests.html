@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Interests</title>
+    <style>
+        body { font-family: sans-serif; }
+        textarea { width: 100%; height: 150px; }
+    </style>
+</head>
+<body>
+    <h1>Manage Interests</h1>
+    <a href="/">Back to Feed</a>
+    <hr>
+    <form action="/interests" method="post">
+        <h2>Your Interests</h2>
+        <p>One interest per line.</p>
+        <textarea name="interests">{% for interest in interests %}{{ interest.text }}{{ "\n" }}{% endfor %}</textarea>
+
+        <h2>Arxiv Categories</h2>
+        <p>One category per line (e.g., cs.AI, math.CO).</p>
+        <textarea name="categories">{% for category in categories %}{{ category.name }}{{ "\n" }}{% endfor %}</textarea>
+
+        <br><br>
+        <button type="submit">Save</button>
+    </form>
+</body>
+</html>
