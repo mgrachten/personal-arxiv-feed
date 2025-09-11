@@ -29,6 +29,18 @@ header {
 header h1 {
     margin: 0;
     font-size: 1.8em;
+    display: flex;
+    align-items: center;
+}
+
+.header-logo {
+    height: 1.6em;
+    vertical-align: middle;
+    margin: 0 0.3em;
+}
+
+.logo-link {
+    line-height: 0; /* Prevents underline from adding extra space */
 }
 
 .controls {
@@ -124,7 +136,7 @@ details:not([open]) > summary .toggle-icon::before {
 
 @media (max-width: 600px) {
     body {
-        padding: 0.5em;
+        padding: 1em;
     }
     header {
         flex-direction: column;

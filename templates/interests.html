@@ -8,13 +8,16 @@
 </head>
 <body>
     <header>
-        <h1>Manage Interests</h1>
+        <div class="site-title">
+            <h1>Personal <a href="https://arxiv.org" target="_blank" rel="noopener noreferrer" class="logo-link"><img src="/static/arxiv-logo.svg" alt="arXiv logo" class="header-logo"></a> Feed</h1>
+        </div>
         <div class="controls">
             <a href="/">Back to Feed</a>
         </div>
     </header>
 
     <main>
+        <h2>Manage Interests</h2>
         <form action="/interests" method="post" class="interest-form">
             <div class="form-section">
                 <label for="interests-textarea">Your Interests</label>
