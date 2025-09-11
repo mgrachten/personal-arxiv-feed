@@ -2,12 +2,21 @@
 <html>
 <head>
     <title>Arxiv Personal Feed</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body { font-family: sans-serif; }
+        body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 1em; }
         .article { margin-bottom: 1em; padding: 1em; border: 1px solid #ccc; }
         .article h2 { font-size: 1.2em; }
         .article p { margin: 0.5em 0; }
         summary { cursor: pointer; }
+
+        @media (max-width: 600px) {
+            body { padding: 0.5em; }
+            .article { padding: 0.5em; }
+            h1 { font-size: 1.5em; }
+            h2 { font-size: 1.1em; }
+            .article h2 { font-size: 1em; }
+        }
     </style>
 </head>
 <body>
