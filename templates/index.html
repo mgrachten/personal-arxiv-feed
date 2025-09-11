@@ -7,22 +7,47 @@
         .article { margin-bottom: 1em; padding: 1em; border: 1px solid #ccc; }
         .article h2 { font-size: 1.2em; }
         .article p { margin: 0.5em 0; }
+        summary { cursor: pointer; }
     </style>
 </head>
 <body>
     <h1>Arxiv Personal Feed</h1>
     <a href="/interests">Manage Interests</a>
+    <div>
+        <input type="radio" id="expandAll" name="abstracts" value="expand" checked>
+        <label for="expandAll">Expand All</label>
+        <input type="radio" id="collapseAll" name="abstracts" value="collapse">
+        <label for="collapseAll">Collapse All</label>
+    </div>
     <hr>
     {% for date, articles in articles_by_date.items() %}
         <h2>{{ date.strftime('%Y-%m-%d') }}</h2>
         {% for article in articles %}
-            <div class="article">
-                <h2><a href="https://arxiv.org/abs/{{ article.entry_id.split('/')[-1] }}">{{ article.title }}</a></h2>
+            <details class="article" open>
+                <summary><h2><a href="https://arxiv.org/abs/{{ article.entry_id.split('/')[-1] }}">{{ article.title }}</a></h2></summary>
                 <p><strong>Published:</strong> {{ article.published.strftime('%Y-%m-%d') }}</p>
                 <p><strong>Abstract:</strong> {{ article.abstract }}</p>
                 <p><strong>Relevance:</strong> {{ article.relevance_reason }}</p>
-            </div>
+            </details>
         {% endfor %}
     {% endfor %}
+
+    <script>
+        const expandAll = document.getElementById('expandAll');
+        const collapseAll = document.getElementById('collapseAll');
+        const details = document.querySelectorAll('details');
+
+        expandAll.addEventListener('change', () => {
+            if (expandAll.checked) {
+                details.forEach(detail => detail.open = true);
+            }
+        });
+
+        collapseAll.addEventListener('change', () => {
+            if (collapseAll.checked) {
+                details.forEach(detail => detail.open = false);
+            }
+        });
+    </script>
 </body>
 </html>
