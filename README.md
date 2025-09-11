@@ -6,10 +6,17 @@ A personal Arxiv feed server that filters papers based on your interests.
 
 This project is a FastAPI application that provides a personalized feed of Arxiv papers. It fetches the latest papers from specified categories daily, uses an LLM to classify them based on your interests, and displays the relevant ones on a simple web interface.
 
+## Screenshots
+
+<p align="center">
+    <img width="392" height="718" alt="image" src="https://github.com/user-attachments/assets/cc1aa894-45f3-4108-b556-8abe53ef6c3f" />&nbsp;&nbsp;&nbsp;&nbsp;
+    <img width="392" height="718" alt="image" src="https://github.com/user-attachments/assets/54f111e0-898e-4b5e-9ca7-a22c6d59341b" />
+ </p>
+
 ## Features
 
 -   **Personalized Feed**: Filters Arxiv papers based on your defined interests.
--   **Automatic Classification**: Uses an LLM to classify papers as relevant or not.
+-   **Automatic Classification**: Uses an LLM to classify papers as relevant or not (requires an API key).
 -   **Web Interface**: A simple web interface to view the feed and manage your interests.
 -   **Scheduled Updates**: Automatically fetches and classifies new papers daily.
 
