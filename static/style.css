@@ -1,0 +1,200 @@
+:root {
+    --background-color: #f4f4f9;
+    --card-background: #ffffff;
+    --text-color: #333;
+    --accent-color: #007bff;
+    --border-color: #ddd;
+    --shadow-color: rgba(0, 0, 0, 0.05);
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1em;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 2em;
+    padding-bottom: 1em;
+    border-bottom: 1px solid var(--border-color);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.8em;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 1.5em;
+}
+
+.controls a {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5em;
+}
+
+.toggle-abstracts {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.toggle-abstracts label {
+    margin-right: 0.5em;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.article {
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-bottom: 1.5em;
+    box-shadow: 0 4px 6px var(--shadow-color);
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.article:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
+.article summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em 1.5em;
+    cursor: pointer;
+    list-style: none; /* Remove default marker */
+}
+
+.article summary::-webkit-details-marker {
+    display: none; /* Chrome/Safari */
+}
+
+.article-title {
+    font-size: 1.2em;
+    margin: 0;
+}
+
+.article-title a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.article-title a:hover {
+    color: var(--accent-color);
+}
+
+.article-content {
+    padding: 0 1.5em 1.5em;
+    border-top: 1px solid var(--border-color);
+}
+
+.article-content p {
+    margin: 0.75em 0;
+    line-height: 1.6;
+}
+
+.toggle-icon {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: var(--accent-color);
+    padding: 0.5em;
+    margin-left: 1em;
+}
+
+details[open] > summary .toggle-icon::before {
+    content: '−'; /* Minus sign */
+}
+
+details:not([open]) > summary .toggle-icon::before {
+    content: '+'; /* Plus sign */
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 0.5em;
+    }
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1em;
+    }
+    .controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+    .article summary, .article-content {
+        padding: 1em;
+    }
+    h1 { font-size: 1.5em; }
+    .article-title { font-size: 1.1em; }
+}
+
+/* Styles for Interests Page */
+.interest-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+}
+
+.form-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.form-section label {
+    font-size: 1.2em;
+    font-weight: 500;
+}
+
+.form-section p {
+    margin: 0 0 0.5em;
+    color: #666;
+}
+
+textarea {
+    width: 100%;
+    padding: 0.75em;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 1em;
+    background-color: var(--card-background);
+    box-sizing: border-box; /* Ensures padding doesn't affect width */
+}
+
+textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+}
+
+button[type="submit"] {
+    align-self: flex-start;
+    padding: 0.75em 1.5em;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--accent-color);
+    color: white;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}

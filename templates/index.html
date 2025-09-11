@@ -1,50 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Arxiv Personal Feed</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 1em; }
-        .article { margin-bottom: 1em; padding: 1em; border: 1px solid #ccc; }
-        .article h2 { font-size: 1.2em; }
-        .article p { margin: 0.5em 0; }
-        summary { cursor: pointer; }
-
-        @media (max-width: 600px) {
-            body { padding: 0.5em; }
-            .article { padding: 0.5em; }
-            h1 { font-size: 1.5em; }
-            h2 { font-size: 1.1em; }
-            .article h2 { font-size: 1em; }
-        }
-    </style>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Arxiv Personal Feed</h1>
-    <a href="/interests">Manage Interests</a>
-    <div>
-        <input type="radio" id="expandAll" name="abstracts" value="expand" checked>
-        <label for="expandAll">Expand All</label>
-        <input type="radio" id="collapseAll" name="abstracts" value="collapse">
-        <label for="collapseAll">Collapse All</label>
-    </div>
-    <hr>
+    <header>
+        <h1>Arxiv Personal Feed</h1>
+        <div class="controls">
+            <a href="/interests">Manage Interests</a>
+            <div class="toggle-abstracts">
+                <input type="radio" id="expandAll" name="abstracts" value="expand" checked>
+                <label for="expandAll">Expand All</label>
+                <input type="radio" id="collapseAll" name="abstracts" value="collapse">
+                <label for="collapseAll">Collapse All</label>
+            </div>
+        </div>
+    </header>
+
+    <main>
     {% for date, articles in articles_by_date.items() %}
         <h2>{{ date.strftime('%Y-%m-%d') }}</h2>
         {% for article in articles %}
             <details class="article" open>
-                <summary><h2><a href="https://arxiv.org/abs/{{ article.entry_id.split('/')[-1] }}">{{ article.title }}</a></h2></summary>
-                <p><strong>Published:</strong> {{ article.published.strftime('%Y-%m-%d') }}</p>
-                <p><strong>Abstract:</strong> {{ article.abstract }}</p>
-                <p><strong>Relevance:</strong> {{ article.relevance_reason }}</p>
+                <summary>
+                    <h2 class="article-title"><a href="https://arxiv.org/abs/{{ article.entry_id.split('/')[-1] }}" target="_blank" rel="noopener noreferrer">{{ article.title }}</a></h2>
+                    <span class="toggle-icon"></span>
+                </summary>
+                <div class="article-content">
+                    <p><strong>Published:</strong> {{ article.published.strftime('%Y-%m-%d') }}</p>
+                    <p><strong>Abstract:</strong> {{ article.abstract }}</p>
+                    <p><strong>Relevance:</strong> {{ article.relevance_reason }}</p>
+                </div>
             </details>
         {% endfor %}
     {% endfor %}
+    </main>
 
     <script>
         const expandAll = document.getElementById('expandAll');
         const collapseAll = document.getElementById('collapseAll');
-        const details = document.querySelectorAll('details');
+        const details = document.querySelectorAll('details.article');
 
         expandAll.addEventListener('change', () => {
             if (expandAll.checked) {

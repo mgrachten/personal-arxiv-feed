@@ -1,27 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Manage Interests</title>
-    <style>
-        body { font-family: sans-serif; }
-        textarea { width: 100%; height: 150px; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Manage Interests</h1>
-    <a href="/">Back to Feed</a>
-    <hr>
-    <form action="/interests" method="post">
-        <h2>Your Interests</h2>
-        <p>One interest per line.</p>
-        <textarea name="interests">{% for interest in interests %}{{ interest.text }}{{ "\n" }}{% endfor %}</textarea>
+    <header>
+        <h1>Manage Interests</h1>
+        <div class="controls">
+            <a href="/">Back to Feed</a>
+        </div>
+    </header>
 
-        <h2>Arxiv Categories</h2>
-        <p>One category per line (e.g., cs.AI, math.CO).</p>
-        <textarea name="categories">{% for category in categories %}{{ category.name }}{{ "\n" }}{% endfor %}</textarea>
+    <main>
+        <form action="/interests" method="post" class="interest-form">
+            <div class="form-section">
+                <label for="interests-textarea">Your Interests</label>
+                <p>One interest per line. These are used by the LLM to determine relevance.</p>
+                <textarea id="interests-textarea" name="interests" rows="8">{% for interest in interests %}{{ interest.text }}{% if not loop.last %}{{ "\n" }}{% endif %}{% endfor %}</textarea>
+            </div>
 
-        <br><br>
-        <button type="submit">Save</button>
-    </form>
+            <div class="form-section">
+                <label for="categories-textarea">Arxiv Categories</label>
+                <p>One category per line (e.g., cs.AI, math.CO). Papers will be fetched from these categories.</p>
+                <textarea id="categories-textarea" name="categories" rows="5">{% for category in categories %}{{ category.name }}{% if not loop.last %}{{ "\n" }}{% endif %}{% endfor %}</textarea>
+            </div>
+
+            <button type="submit">Save Changes</button>
+        </form>
+    </main>
 </body>
 </html>
