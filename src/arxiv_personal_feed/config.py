@@ -11,5 +11,7 @@ class Settings(BaseSettings):
     scheduler_hour: int = 20
     scheduler_minute: int = 0
 
+    server_port: int = 8000
+
 
 settings = Settings()

@@ -129,4 +129,4 @@ def update_interests(
 
 def run():
     import uvicorn
-    uvicorn.run("arxiv_personal_feed.main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("arxiv_personal_feed.main:app", host="0.0.0.0", port=settings.server_port, reload=True)
