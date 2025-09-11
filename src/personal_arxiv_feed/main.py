@@ -32,24 +32,21 @@ def get_session():
 @app.on_event("startup")
 def startup_event():
     create_db_and_tables()
-    
+
     # Run once on startup in a separate thread
     import threading
+
     threading.Thread(target=fetch_and_classify).start()
 
-    executors = {
-        'default': ThreadPoolExecutor(1)
-    }
+    executors = {"default": ThreadPoolExecutor(1)}
     scheduler = BackgroundScheduler(timezone=pytz.utc, executors=executors)
-    
+
     et = pytz.timezone(settings.scheduler_timezone)
     scheduler.add_job(
         fetch_and_classify,
         trigger=CronTrigger(
-            hour=settings.scheduler_hour,
-            minute=settings.scheduler_minute,
-            timezone=et
-        )
+            hour=settings.scheduler_hour, minute=settings.scheduler_minute, timezone=et
+        ),
     )
     scheduler.start()
 
@@ -59,11 +56,11 @@ def fetch_and_classify():
     with Session(engine) as session:
         categories = session.exec(select(Category)).all()
         interests = list(session.exec(select(Interest)).all())
-        
+
         if not categories:
             logger.info("No categories defined. Skipping fetch.")
             return
-        
+
         logger.info(f"Found {len(categories)} categories and {len(interests)} interests.")
 
         new_articles = fetch_new_articles([c.name for c in categories])
@@ -85,7 +82,7 @@ def read_root(request: Request, session: Session = Depends(get_session)):
         .order_by(desc(Article.published))
     )
     articles = session.exec(statement).all()
-    
+
     articles_by_date = {}
     for article in articles:
         if article.published not in articles_by_date:
@@ -123,9 +120,13 @@ def update_interests(
     session.commit()
 
     # Add new interests and categories from the form
-    new_interests = [Interest(text=i.strip()) for i in interests.splitlines() if i.strip()]
-    new_categories = [Category(name=c.strip()) for c in categories.splitlines() if c.strip()]
-    
+    new_interests = [
+        Interest(text=i.strip()) for i in interests.splitlines() if i.strip()
+    ]
+    new_categories = [
+        Category(name=c.strip()) for c in categories.splitlines() if c.strip()
+    ]
+
     session.add_all(new_interests)
     session.add_all(new_categories)
     session.commit()
@@ -134,6 +135,13 @@ def update_interests(
     background_tasks.add_task(fetch_and_classify)
     return RedirectResponse(url="/interests", status_code=303)
 
+
 def run():
     import uvicorn
-    uvicorn.run("personal_arxiv_feed.main:app", host="0.0.0.0", port=settings.server_port, reload=True)
+
+    uvicorn.run(
+        "personal_arxiv_feed.main:app",
+        host="0.0.0.0",
+        port=settings.server_port,
+        reload=True,
+    )

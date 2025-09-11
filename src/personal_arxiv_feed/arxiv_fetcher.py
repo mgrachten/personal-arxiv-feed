@@ -5,6 +5,7 @@ from .models import Article
 from .config import settings
 import datetime
 
+
 def fetch_new_articles(categories: list[str]) -> list[Article]:
     """
     Fetches new articles for each category since the last update.
@@ -13,9 +14,7 @@ def fetch_new_articles(categories: list[str]) -> list[Article]:
 
     with Session(engine) as session:
         # Get all existing entry_ids in one query for efficiency
-        existing_entry_ids = set(
-            session.exec(select(Article.entry_id)).all()
-        )
+        existing_entry_ids = set(session.exec(select(Article.entry_id)).all())
 
         for category in categories:
             search = arxiv.Search(
@@ -25,7 +24,10 @@ def fetch_new_articles(categories: list[str]) -> list[Article]:
             )
 
             for result in search.results():
-                if result.entry_id in existing_entry_ids or result.entry_id in new_articles_map:
+                if (
+                    result.entry_id in existing_entry_ids
+                    or result.entry_id in new_articles_map
+                ):
                     continue
 
                 article = Article(

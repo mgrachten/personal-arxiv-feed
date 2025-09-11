@@ -4,8 +4,6 @@ import datetime
 from pydantic_settings import BaseSettings
 
 
-
-
 class Interest(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     text: str = Field(index=True)
