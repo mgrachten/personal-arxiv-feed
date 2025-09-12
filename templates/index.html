@@ -30,8 +30,9 @@
                     <span class="toggle-icon"></span>
                 </summary>
                 <div class="article-content">
-                    <p><strong>Published:</strong> {{ article.published.strftime('%Y-%m-%d') }}</p>
+                    <p><strong>Authors:</strong> {{ article.authors }}</p>
                     <p><strong>Abstract:</strong> {{ article.abstract }}</p>
+                    <p><strong>Published:</strong> {{ article.published.strftime('%Y-%m-%d') }}</p>
                     <p><strong>Relevance:</strong> {{ article.relevance_reason }}</p>
                 </div>
             </details>

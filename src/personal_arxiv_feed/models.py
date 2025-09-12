@@ -1,7 +1,5 @@
-from typing import List
 from sqlmodel import Field, SQLModel
 import datetime
-from pydantic_settings import BaseSettings
 
 
 class Interest(SQLModel, table=True):
@@ -18,6 +16,7 @@ class Article(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     entry_id: str = Field(unique=True)
     title: str
+    authors: str
     abstract: str
     published: datetime.date
     is_relevant: bool = Field(default=False)

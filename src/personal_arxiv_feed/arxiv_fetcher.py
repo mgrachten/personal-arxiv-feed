@@ -33,6 +33,7 @@ def fetch_new_articles(categories: list[str]) -> list[Article]:
                 article = Article(
                     entry_id=result.entry_id,
                     title=result.title,
+                    authors=", ".join(author.name for author in result.authors),
                     abstract=result.summary,
                     published=result.published.date(),
                 )
