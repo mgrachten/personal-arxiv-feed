@@ -81,11 +81,14 @@ def classify_and_update_articles(articles: list[Article], interests: list[Intere
         return
 
     with Session(engine) as session:
+        saved_count = 0
         for article, decision in zip(articles, all_decisions):
-            session.add(article)
-            article.is_relevant = decision.is_relevant
-            article.relevance_reason = decision.reason
+            if decision.is_relevant:
+                article.is_relevant = decision.is_relevant
+                article.relevance_reason = decision.reason
+                session.add(article)
+                saved_count += 1
         session.commit()
         logger.info(
-            f"Successfully saved {len(all_decisions)} classified articles to the database."
+            f"Successfully saved {saved_count} relevant articles to the database."
         )
