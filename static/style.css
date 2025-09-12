@@ -56,17 +56,25 @@ header h1 {
     padding: 0.5em;
 }
 
-.toggle-abstracts {
-    display: flex;
-    align-items: center;
-    gap: 0.5em;
+.toggle-button {
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 0.5em 1em;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 0.9em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
-.toggle-abstracts label {
-    margin-right: 0.5em;
-    cursor: pointer;
-    white-space: nowrap;
+.toggle-button:hover {
+    background-color: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
 }
+
 
 .article {
     background-color: var(--card-background);

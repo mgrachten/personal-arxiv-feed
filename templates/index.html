@@ -11,12 +11,7 @@
         <h1>Personal <a href="https://arxiv.org" target="_blank" rel="noopener noreferrer" class="logo-link"><img src="/static/arxiv-logo.svg" alt="arXiv logo" class="header-logo"></a> Feed</h1>
         <div class="controls">
             <a href="/interests">Manage Interests</a>
-            <div class="toggle-abstracts">
-                <input type="radio" id="expandAll" name="abstracts" value="expand" checked>
-                <label for="expandAll">Expand All</label>
-                <input type="radio" id="collapseAll" name="abstracts" value="collapse">
-                <label for="collapseAll">Collapse All</label>
-            </div>
+            <button id="toggle-all-btn" class="toggle-button">Collapse All</button>
         </div>
     </header>
 
@@ -24,7 +19,7 @@
     {% for date, articles in articles_by_date.items() %}
         <h2>{{ date.strftime('%Y-%m-%d') }}</h2>
         {% for article in articles %}
-            <details class="article" open>
+            <details class="article">
                 <summary>
                     <h2 class="article-title"><a href="https://arxiv.org/abs/{{ article.entry_id.split('/')[-1] }}" target="_blank" rel="noopener noreferrer">{{ article.title }}</a></h2>
                     <span class="toggle-icon"></span>
@@ -41,20 +36,36 @@
     </main>
 
     <script>
-        const expandAll = document.getElementById('expandAll');
-        const collapseAll = document.getElementById('collapseAll');
-        const details = document.querySelectorAll('details.article');
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleBtn = document.getElementById('toggle-all-btn');
+            const articles = document.querySelectorAll('details.article');
 
-        expandAll.addEventListener('change', () => {
-            if (expandAll.checked) {
-                details.forEach(detail => detail.open = true);
+            function updateButtonState() {
+                // Check if any article is currently open
+                const anyOpen = [...articles].some(article => article.open);
+                if (anyOpen) {
+                    toggleBtn.textContent = 'Collapse All';
+                } else {
+                    toggleBtn.textContent = 'Expand All';
+                }
             }
-        });
 
-        collapseAll.addEventListener('change', () => {
-            if (collapseAll.checked) {
-                details.forEach(detail => detail.open = false);
-            }
+            toggleBtn.addEventListener('click', () => {
+                // If any are open, the action is to close all. Otherwise, open all.
+                const shouldOpen = ![...articles].some(article => article.open);
+                articles.forEach(article => {
+                    article.open = shouldOpen;
+                });
+                // The 'toggle' event on each details element will handle updating the button text.
+            });
+
+            // Update the button text whenever any article is manually opened or closed.
+            articles.forEach(article => {
+                article.addEventListener('toggle', updateButtonState);
+            });
+
+            // Set the initial state of the button correctly on page load.
+            updateButtonState();
         });
     </script>
 </body>
