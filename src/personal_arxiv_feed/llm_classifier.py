@@ -1,12 +1,13 @@
+import logging
+import asyncio
+
 from pydantic import BaseModel, Field
+from sqlmodel import Session, select
 import pydantic_ai
+
 from .models import Article, Interest
 from .config import settings
-from sqlmodel import Session, select
 from .database import engine
-import logging
-from typing import List
-import asyncio
 
 
 logger = logging.getLogger(__name__)
@@ -20,12 +21,12 @@ class RelevanceDecision(BaseModel):
 
 
 class BatchRelevanceDecision(BaseModel):
-    decisions: List[RelevanceDecision]
+    decisions: list[RelevanceDecision]
 
 
 async def classify_article_batch(
-    articles: List[Article], interests: List[Interest]
-) -> List[RelevanceDecision]:
+    articles: list[Article], interests: list[Interest]
+) -> list[RelevanceDecision]:
     interest_str = ", ".join([i.text for i in interests])
 
     instructions = f"You are a research assistant. Your task is to determine if a research paper is relevant to the user's interests. The user's interests are: {interest_str}. You will be given a list of papers and you must return a decision for each paper."
@@ -56,7 +57,7 @@ async def classify_article_batch(
     return result.output.decisions
 
 
-def classify_and_update_articles(articles: List[Article], interests: List[Interest]):
+def classify_and_update_articles(articles: list[Article], interests: list[Interest]):
     if not articles:
         return
 

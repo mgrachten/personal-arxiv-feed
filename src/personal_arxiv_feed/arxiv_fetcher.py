@@ -1,10 +1,11 @@
 import arxiv
-from sqlmodel import Session, select
-from .database import engine
+
 from .models import Article
 from .config import settings
-from .cache import LAST_QUERY_ENTRY_IDS
-import datetime
+
+# A cache to hold the entry_ids of articles seen in the last query.
+# This is cleared when interests are updated to allow for re-classification.
+LAST_QUERY_ENTRY_IDS: set[str] = set()
 
 
 def fetch_new_articles(categories: list[str]) -> list[Article]:

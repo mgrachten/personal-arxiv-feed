@@ -1,5 +1,5 @@
-from sqlmodel import Field, SQLModel
 import datetime
+from sqlmodel import Field, SQLModel
 
 
 class Interest(SQLModel, table=True):

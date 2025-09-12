@@ -2,19 +2,18 @@ from fastapi import FastAPI, Request, Form, Depends, BackgroundTasks
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from sqlmodel import Session, select, delete, desc
-from .database import engine, create_db_and_tables
-from .models import Article, Interest, Category
-from .arxiv_fetcher import fetch_new_articles
-from .llm_classifier import classify_and_update_articles
-from .config import settings
-from .cache import LAST_QUERY_ENTRY_IDS
+from sqlmodel import Session, select, desc
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from apscheduler.executors.pool import ThreadPoolExecutor
 import pytz
 import datetime
 import logging
+from .database import engine, create_db_and_tables
+from .models import Article, Interest, Category
+from .arxiv_fetcher import fetch_new_articles, LAST_QUERY_ENTRY_IDS
+from .llm_classifier import classify_and_update_articles
+from .config import settings
 
 
 logging.basicConfig(level=logging.INFO)
