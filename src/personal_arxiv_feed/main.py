@@ -8,6 +8,7 @@ from .models import Article, Interest, Category
 from .arxiv_fetcher import fetch_new_articles
 from .llm_classifier import classify_and_update_articles
 from .config import settings
+from .cache import LAST_QUERY_ENTRY_IDS
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from apscheduler.executors.pool import ThreadPoolExecutor
@@ -18,6 +19,7 @@ import logging
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -130,6 +132,10 @@ def update_interests(
     session.add_all(new_interests)
     session.add_all(new_categories)
     session.commit()
+
+    # Clear the cache to force re-classification
+    LAST_QUERY_ENTRY_IDS.clear()
+    logger.info("Interests updated, cache cleared.")
 
     logger.info("Interests and categories updated. Triggering background fetch.")
     background_tasks.add_task(fetch_and_classify)
