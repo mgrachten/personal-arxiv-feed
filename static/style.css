@@ -91,7 +91,6 @@ header h1 {
 
 .article summary {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     padding: 1em 1.5em;
     cursor: pointer;
@@ -127,11 +126,12 @@ header h1 {
 }
 
 .toggle-icon {
+    order: -1; /* Move to the start of the flex container */
     font-size: 1.5em;
     font-weight: bold;
     color: var(--accent-color);
     padding: 0.5em;
-    margin-left: 1em;
+    margin-right: 1em; /* Add space to the right */
 }
 
 details[open] > summary .toggle-icon::before {
