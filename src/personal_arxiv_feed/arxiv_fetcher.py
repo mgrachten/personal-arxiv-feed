@@ -1,10 +1,10 @@
 import arxiv
+from sqlmodel import Session, select
+from .database import engine
 from .models import Article
 from .config import settings
 from .cache import LAST_QUERY_ENTRY_IDS
-import logging
-
-logger = logging.getLogger(__name__)
+import datetime
 
 
 def fetch_new_articles(categories: list[str]) -> list[Article]:
@@ -38,9 +38,8 @@ def fetch_new_articles(categories: list[str]) -> list[Article]:
             )
             new_articles_map[result.entry_id] = article
 
-    # Update the global cache with the IDs from this query
+    # Update the global cache with the IDs from the current query
     LAST_QUERY_ENTRY_IDS.clear()
     LAST_QUERY_ENTRY_IDS.update(current_query_ids)
-    logger.info(f"Cache updated with {len(LAST_QUERY_ENTRY_IDS)} entry IDs.")
 
     return list(new_articles_map.values())

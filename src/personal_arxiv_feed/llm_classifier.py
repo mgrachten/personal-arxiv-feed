@@ -2,9 +2,12 @@ from pydantic import BaseModel, Field
 import pydantic_ai
 from .models import Article, Interest
 from .config import settings
-from sqlmodel import Session
+from sqlmodel import Session, select
 from .database import engine
 import logging
+from typing import List
+import asyncio
+
 
 logger = logging.getLogger(__name__)
 
@@ -17,12 +20,12 @@ class RelevanceDecision(BaseModel):
 
 
 class BatchRelevanceDecision(BaseModel):
-    decisions: list[RelevanceDecision]
+    decisions: List[RelevanceDecision]
 
 
-def classify_article_batch(
-    articles: list[Article], interests: list[Interest]
-) -> list[RelevanceDecision]:
+async def classify_article_batch(
+    articles: List[Article], interests: List[Interest]
+) -> List[RelevanceDecision]:
     interest_str = ", ".join([i.text for i in interests])
 
     instructions = f"You are a research assistant. Your task is to determine if a research paper is relevant to the user's interests. The user's interests are: {interest_str}. You will be given a list of papers and you must return a decision for each paper."
@@ -31,6 +34,9 @@ def classify_article_batch(
     for i, article in enumerate(articles):
         papers_str += f"\n--- Paper {i + 1} ---\n"
         for field in settings.llm_fields_to_include:
+            # Ensure authors are included if specified
+            if field == "authors" and not hasattr(article, "authors"):
+                continue
             papers_str += f"{field.capitalize()}: {getattr(article, field)}\n"
 
     user_prompt = f"""
@@ -46,21 +52,16 @@ def classify_article_batch(
         output_type=BatchRelevanceDecision,
     )
 
-    result = agent.run_sync(user_prompt=user_prompt, model=settings.llm_model)
+    result = await agent.run(user_prompt=user_prompt, model=settings.llm_model)
     return result.output.decisions
 
 
-def classify_and_update_articles(articles: list[Article], interests: list[Interest]):
+def classify_and_update_articles(articles: List[Article], interests: List[Interest]):
+    if not articles:
+        return
+
     if not interests:
-        logger.info("No interests provided. Marking all new articles as relevant.")
-        with Session(engine) as session:
-            for article in articles:
-                article.is_relevant = True
-                article.relevance_reason = (
-                    "No interests provided, defaulting to relevant."
-                )
-                session.add(article)
-            session.commit()
+        logger.info("No interests provided. Skipping classification.")
         return
 
     all_decisions = []
@@ -71,7 +72,7 @@ def classify_and_update_articles(articles: list[Article], interests: list[Intere
         for i in range(0, len(articles), settings.llm_batch_size):
             batch = articles[i : i + settings.llm_batch_size]
             logger.info(f"Classifying batch {i // settings.llm_batch_size + 1}...")
-            decisions = classify_article_batch(batch, interests)
+            decisions = asyncio.run(classify_article_batch(batch, interests))
             all_decisions.extend(decisions)
         logger.info("Finished classifying all articles.")
     except Exception as e:
@@ -81,14 +82,26 @@ def classify_and_update_articles(articles: list[Article], interests: list[Intere
         return
 
     with Session(engine) as session:
+        # Final check to prevent race conditions
+        article_ids_to_check = [article.entry_id for article in articles]
+        existing_ids = set(
+            session.exec(
+                select(Article.entry_id).where(Article.entry_id.in_(article_ids_to_check))
+            ).all()
+        )
+
         saved_count = 0
         for article, decision in zip(articles, all_decisions):
-            if decision.is_relevant:
+            if decision.is_relevant and article.entry_id not in existing_ids:
                 article.is_relevant = decision.is_relevant
                 article.relevance_reason = decision.reason
                 session.add(article)
                 saved_count += 1
-        session.commit()
-        logger.info(
-            f"Successfully saved {saved_count} relevant articles to the database."
-        )
+
+        if saved_count > 0:
+            session.commit()
+            logger.info(
+                f"Successfully saved {saved_count} new relevant articles to the database."
+            )
+        else:
+            logger.info("No new relevant articles to save.")
