@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     scheduler_minute: int = 30
 
     server_port: int = 8000
+    papers_per_page: int = 20
 
     arxiv_max_results_per_category: int = 50
 

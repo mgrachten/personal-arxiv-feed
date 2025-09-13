@@ -218,3 +218,50 @@ button[type="submit"] {
 button[type="submit"]:hover {
     background-color: #0056b3;
 }
+
+/* Pagination Styles */
+footer {
+    margin-top: 2em;
+    padding: 1.5em;
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px var(--shadow-color);
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.pagination a, .pagination span {
+    padding: 0.5em 1em;
+    text-decoration: none;
+    color: var(--text-color);
+    border: 1px solid transparent; /* No visible border */
+    border-radius: 6px;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.pagination a:hover {
+    background-color: #e9ecef;
+    color: var(--text-color);
+}
+
+.pagination .active {
+    background-color: var(--accent-color);
+    color: white;
+    font-weight: bold;
+}
+
+.pagination .disabled {
+    color: #999;
+    cursor: not-allowed;
+}
+
+.pagination .ellipsis {
+    padding: 0.5em 0.2em;
+}
+
