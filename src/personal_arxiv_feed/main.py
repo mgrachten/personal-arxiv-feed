@@ -10,16 +10,17 @@ import pytz
 import datetime
 import logging
 import math
+
+logging.basicConfig(level=logging.INFO)
+logging.getLogger("sqlalchemy.engine").setLevel(logging.WARNING)
+logger = logging.getLogger(__name__)
+
+
 from .database import engine, create_db_and_tables
 from .models import Article, Interest, Category
 from .arxiv_fetcher import fetch_new_articles, LAST_QUERY_ENTRY_IDS
 from .llm_classifier import classify_and_update_articles
 from .config import settings
-
-
-logging.basicConfig(level=logging.INFO)
-logging.getLogger("sqlalchemy.engine").setLevel(logging.WARNING)
-logger = logging.getLogger(__name__)
 
 
 app = FastAPI()

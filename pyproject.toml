@@ -14,6 +14,7 @@ dependencies = [
     "apscheduler",
     "python-dotenv",
     "pytz",
+    "appdirs",
 ]
 
 [project.scripts]
