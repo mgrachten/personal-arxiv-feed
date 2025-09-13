@@ -19,5 +19,4 @@ class Article(SQLModel, table=True):
     authors: str
     abstract: str
     published: datetime.date
-    is_relevant: bool = Field(default=False)
     relevance_reason: str | None = None
