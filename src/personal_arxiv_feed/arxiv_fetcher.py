@@ -1,7 +1,10 @@
 import arxiv
+import logging
 
 from .models import Article
 from .config import settings
+
+logger = logging.getLogger(__name__)
 
 # A cache to hold the entry_ids of articles seen in the last query.
 # This is cleared when interests are updated to allow for re-classification.
@@ -16,6 +19,7 @@ def fetch_new_articles(categories: list[str]) -> list[Article]:
     current_query_ids = set()
 
     for category in categories:
+        logger.info(f"Fetching articles for category: {category}")
         search = arxiv.Search(
             query=f"cat:{category}",
             max_results=settings.arxiv_max_results_per_category,

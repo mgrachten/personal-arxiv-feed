@@ -93,6 +93,8 @@ def classify_and_update_articles(articles: list[Article], interests: list[Intere
 
         saved_count = 0
         for article, decision in zip(articles, all_decisions):
+            classification = "RELEVANT" if decision.is_relevant else "NOT RELEVANT"
+            logger.info(f"{classification}: {article.entry_id} {article.title}")
             if decision.is_relevant and article.entry_id not in existing_ids:
                 article.relevance_reason = decision.reason
                 session.add(article)
