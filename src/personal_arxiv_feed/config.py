@@ -17,7 +17,7 @@ class Settings:
         self.server_port: int = data.get("server_port", 8000)
         self.papers_per_page: int = data.get("papers_per_page", 20)
         self.arxiv_max_results_per_category: int = data.get(
-            "arxiv_max_results_per_category", 1
+            "arxiv_max_results_per_category", 100
         )
 
 
